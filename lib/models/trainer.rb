@@ -6,6 +6,7 @@ class Trainer
   include DataMapper::Resource
 
   property :id,            Serial
+  property :name,          String
   property :pokemon_one,   Integer
   property :pokemon_two,   Integer
   property :pokemon_three, Integer

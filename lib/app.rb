@@ -3,7 +3,6 @@ require 'json'
 require 'sinatra'
 require_relative 'models/pokemon'
 require_relative 'models/trainer'
-require_relative 'task_functions'
 
 DataMapper.setup(:default, 'postgres://adamreed:@localhost/pokemon')
 
@@ -16,7 +15,7 @@ get '/api/trainers/:id' do |id|
   if trainer.nil?
     [404, 'Error: No trainer found'.to_json]
   else
-    pokemon = Pokemon.get(trainer.id)
+    pokemon = Pokemon.all(trainer_id: trainer.id)
     pokemon.to_json
   end
 end

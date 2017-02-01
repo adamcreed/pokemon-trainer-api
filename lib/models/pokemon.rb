@@ -20,6 +20,7 @@ class Pokemon
   property :ability,        String
   property :hidden_ability, String
   property :moves,          String
+  property :trainer_id,     Integer
 
   belongs_to :trainer
 end
