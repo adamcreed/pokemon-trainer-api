@@ -1,4 +1,3 @@
-require_relative '../environment'
 require_relative '../models/pokemon'
 
 class CreatePokemonTable < ActiveRecord::Migration[5.0]

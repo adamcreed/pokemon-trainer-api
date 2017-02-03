@@ -1,9 +1,9 @@
 require 'app'
 require 'rspec'
 require 'rack/test'
-require 'migration/pokemon'
+require 'migrate/002_create_pokemon_table'
 require 'seed/pokemon'
-require 'migration/trainer'
+require 'migrate/001_create_trainers_table'
 require 'seed/trainer'
 
 describe 'app' do

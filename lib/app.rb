@@ -1,9 +1,20 @@
 require 'json'
 require 'sinatra'
-require 'pry'
+require 'yaml'
 require_relative 'models/pokemon'
 require_relative 'models/trainer'
-require_relative '../lib/environment'
+
+database_config = ENV['DATABASE_URL']
+
+if database_config.blank?
+  database_config = YAML::load(File.open('config/database.yml'))
+end
+
+ActiveRecord::Base.establish_connection(database_config)
+
+after do
+  ActiveRecord::Base.connection.close
+end
 
 get '/api/trainers' do
   Trainer.all.to_json
