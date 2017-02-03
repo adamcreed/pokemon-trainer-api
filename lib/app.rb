@@ -11,29 +11,27 @@ end
 
 get '/api/trainers/:id' do |id|
   trainer = Trainer.find_by(id: id)
-  if trainer.nil?
-    [404, 'Error: No trainer found'.to_json]
-  else
-    pokemon = Pokemon.where(trainer_id: trainer.id)
-    pokemon.to_json
-  end
+  halt [404, 'No trainer found'.to_json] if trainer.nil?
+
+  trainer.team.to_json
 end
 
 get '/api/pokemon/:name' do |name|
   pokemon = Pokemon.where(name: name)
   if pokemon.nil? or pokemon.empty?
-    [404, 'Error: No trainers found with that pokemon'.to_json]
-  else
-    trainers = pokemon.all.map { |pokemon| Trainer.find(pokemon.trainer_id) }
-    trainers.to_json
+    halt [404, 'No trainers found with that pokemon'.to_json]
   end
+
+    trainers = pokemon.map { |pokemon| Trainer.find(pokemon.trainer_id) }
+    trainers.to_json
 end
 
 post '/api/pokemon' do
   pokemon = Pokemon.new(params)
   halt [400, 'No name provided'.to_json] unless pokemon.valid?
 
-  trainer = Trainer.find(pokemon.trainer_id)
+  trainer = Trainer.find_by(id: pokemon.trainer_id)
+  halt [400, 'Trainer not found'.to_json] if trainer.nil?
   halt [400, 'Team is full'.to_json] if trainer.team.size >= 6
 
   pokemon.save

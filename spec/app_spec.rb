@@ -109,5 +109,16 @@ describe 'app' do
         expect(JSON.parse(last_response.body)).to eq 'Team is full'
       end
     end
+
+    context "when a pokemon is added to a nonexistant user" do
+      it 'returns an error' do
+        params = { name: 'Sandslash', trainer_id: 99999999 }
+
+        post '/api/pokemon', params
+
+        expect(last_response.status).to eq 400
+        expect(JSON.parse(last_response.body)).to eq 'Trainer not found'
+      end
+    end
   end
 end
