@@ -1,27 +1,12 @@
-require 'rubygems'
-require 'data_mapper'
+require 'active_record'
 require_relative 'pokemon'
 
-class Trainer
-  include DataMapper::Resource
+class Trainer < ActiveRecord::Base
+  has_many :pokemon, dependent: :destroy
+  validates :name,
+            presence: true
 
-  property :id,            Serial
-  property :name,          String
-  property :pokemon_one,   Integer
-  property :pokemon_two,   Integer
-  property :pokemon_three, Integer
-  property :pokemon_four,  Integer
-  property :pokemon_five,  Integer
-  property :pokemon_six,   Integer
-
-  has n, :pokemon, constraint: :destroy
+  def team
+    Pokemon.where(trainer_id: attributes['id'])
+  end
 end
-
-def main
-  DataMapper.setup(:default, 'postgres://adamreed:@localhost/pokemon')
-
-  DataMapper.finalize
-  DataMapper.auto_migrate!
-end
-
-main if __FILE__ == $PROGRAM_NAME
