@@ -3,6 +3,14 @@ require 'csv'
 
 class Seed
   def self.pokemon
+    connection_details = ENV['DATABASE_URL']
+
+    if connection_details.blank?
+      connection_details = YAML::load(File.open('config/database.yml'))
+    end
+
+    ActiveRecord::Base.establish_connection(connection_details)
+
     CSV.foreach('lib/data/pokemon') do |row|
       Pokemon.create(
         name:           row[0],
