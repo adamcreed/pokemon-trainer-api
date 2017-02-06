@@ -17,7 +17,7 @@ end
 
 get '/api/pokemon/:name' do |name|
   pokemon = Pokemon.where(name: name)
-  if pokemon.nil? or pokemon.empty?
+  if pokemon.blank?
     halt [404, 'No trainers found with that pokemon'.to_json]
   end
 
