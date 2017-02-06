@@ -170,6 +170,16 @@ describe 'app' do
       end
     end
 
+    context 'when age and gender are provided' do
+      it 'creates a new user with age and gender' do
+        post '/api/trainers/Carl%20Sagan', { name: 'Carl Sagan', age: 82, gender: 'M'}
+
+        expect(JSON.parse(last_response.body)['age']).to eq 82
+        expect(JSON.parse(last_response.body)['gender']).to eq 'M'
+        expect(Trainer.last.name).to eq 'Carl Sagan'
+      end
+    end
+
     context 'when a name is not entered' do
       it 'returns a 400 error' do
         post '/api/trainers/'

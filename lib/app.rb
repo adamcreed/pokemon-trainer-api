@@ -61,7 +61,10 @@ patch '/api/pokemon/:id' do |id|
 end
 
 post '/api/trainers/:name' do |name|
-  trainer = Trainer.create(name: name)
+  params.delete('splat')
+  params.delete('captures')
+
+  trainer = Trainer.create(params)
   trainer.to_json
 end
 
