@@ -63,10 +63,15 @@ patch '/api/pokemon/:id' do |id|
   end
 end
 
-# post '/api/users/:name' do |name|
-#   create_user(name)
-# end
-#
+post '/api/trainers/:name' do |name|
+  trainer = Trainer.create(name: name)
+  trainer.to_json
+end
+
+post '/api/trainers/' do
+  halt [400, 'No name entered'.to_json]
+end
+
 # delete '/api/tasks' do
 #   delete_entry(params)
 # end

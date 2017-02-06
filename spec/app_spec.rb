@@ -159,4 +159,24 @@ describe 'app' do
       end
     end
   end
+
+  describe '#post /api/trainers/:name' do
+    context 'when a name is entered' do
+      it 'creates a new user' do
+        post '/api/trainers/Carl%20Sagan'
+
+        expect(JSON.parse(last_response.body)['name']).to eq 'Carl Sagan'
+        expect(Trainer.last.name).to eq 'Carl Sagan'
+      end
+    end
+
+    context 'when a name is not entered' do
+      it 'returns a 400 error' do
+        post '/api/trainers/'
+
+        expect(JSON.parse(last_response.body)).to eq 'No name entered'
+        expect(last_response.status).to eq 400
+      end
+    end
+  end
 end
