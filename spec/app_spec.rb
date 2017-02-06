@@ -179,4 +179,23 @@ describe 'app' do
       end
     end
   end
+
+  describe '#delete /api/pokemon/:id' do
+    context 'when an ID for an existing pokemon is entered' do
+      it 'deletes the pokemon' do
+        delete '/api/pokemon/37'
+
+        expect(Pokemon.find_by(id: 37)).to eq nil
+      end
+    end
+
+    context 'when an ID for an non-existing pokemon is entered' do
+      it 'returns a 400 error' do
+        delete '/api/pokemon/9999999'
+
+        expect(last_response.status).to eq 400
+        expect(JSON.parse(last_response.body)).to eq 'No pokemon found'
+      end
+    end
+  end
 end
