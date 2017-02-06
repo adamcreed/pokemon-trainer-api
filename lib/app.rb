@@ -76,3 +76,11 @@ delete '/api/pokemon/:id' do |id|
   pokemon.destroy
   pokemon.to_json
 end
+
+delete '/api/trainers/:id' do |id|
+  trainer = Trainer.find_by(id: id)
+  halt [400, 'No trainer found'.to_json] if trainer.nil?
+
+  trainer.destroy
+  trainer.to_json
+end

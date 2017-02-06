@@ -198,4 +198,23 @@ describe 'app' do
       end
     end
   end
+
+  describe '#delete /api/trainers/:id' do
+    context 'when an ID for an existing user is entered' do
+      it 'deletes the user' do
+        delete '/api/trainers/8'
+
+        expect(Trainer.find_by(id: 8)).to eq nil
+      end
+    end
+
+    context 'when an ID for an non-existing user is entered' do
+      it 'returns a 400 error' do
+        delete '/api/trainers/9999999'
+
+        expect(last_response.status).to eq 400
+        expect(JSON.parse(last_response.body)).to eq 'No trainer found'
+      end
+    end
+  end
 end
