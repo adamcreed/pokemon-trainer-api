@@ -49,21 +49,20 @@ post '/api/pokemon' do
   [201, pokemon.to_json]
 end
 
-# put '/api/trainers/:id' do |id|
-#   task = TaskUser.get(id)
-#
-#   if task.nil?
-#     status 404
-#   else
-#     complete_task(task)
-#   end
-# end
+patch '/api/pokemon/:id' do |id|
+  pokemon = Pokemon.find_by(id: id)
 
-#
-# post '/api/users/' do
-#   [400, 'Error: No name entered'.to_json]
-# end
-#
+  if pokemon.nil?
+    halt [404, 'No pokemon found'.to_json]
+  else
+    params.delete('splat')
+    params.delete('captures')
+
+    pokemon.update(params)
+    pokemon.to_json
+  end
+end
+
 # post '/api/users/:name' do |name|
 #   create_user(name)
 # end

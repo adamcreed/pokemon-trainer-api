@@ -99,7 +99,7 @@ describe 'app' do
       end
     end
 
-    context "when the user's team is full" do
+    context "when the user's team is full;" do
       it 'returns an error' do
         params = { name: 'Sandslash', trainer_id: 1 }
 
@@ -110,7 +110,7 @@ describe 'app' do
       end
     end
 
-    context "when a pokemon is added to a nonexistant user" do
+    context 'when a pokemon is added to a nonexistant user' do
       it 'returns an error' do
         params = { name: 'Sandslash', trainer_id: 99999999 }
 
@@ -118,6 +118,44 @@ describe 'app' do
 
         expect(last_response.status).to eq 400
         expect(JSON.parse(last_response.body)).to eq 'Trainer not found'
+      end
+    end
+  end
+
+  describe '#patch /api/pokemon/:id' do
+    context 'when a valid ID is entered' do
+      it 'updates the pokemon' do
+        params = {
+                   id: 7, name: 'Vulpix', nickname: 'Pikachu', gender: 'F',
+                   level: 28, hp: 62, atk: 24, def: 23, sp_atk: 32, sp_def: 37,
+                   spd: 39, nature: 'Calm', ability: 'Flash Fire',
+                   hidden_ability: 'Drought',
+                   moves: 'Flame Burst,Confuse Ray,Quick Attack,Ember',
+                   held_item: 'Charcoal', trainer_id: 2
+                 }
+
+        patch '/api/pokemon/7', params
+
+        expect(JSON.parse(last_response.body)['id']).to eq 7
+        expect(JSON.parse(last_response.body)['name']).to eq 'Vulpix'
+      end
+    end
+
+    context 'when an invalid ID is entered' do
+      it 'returns a 404' do
+        params = {
+                   id: 99999, name: 'Vulpix', nickname: 'Pikachu', gender: 'F',
+                   level: 28, hp: 62, atk: 24, def: 23, sp_atk: 32, sp_def: 37,
+                   spd: 39, nature: 'Calm', ability: 'Flash Fire',
+                   hidden_ability: 'Drought',
+                   moves: 'Flame Burst,Confuse Ray,Quick Attack,Ember',
+                   held_item: 'Charcoal', trainer_id: 2
+                 }
+
+        patch '/api/pokemon/99999', params
+
+        expect(last_response.status).to eq 404
+        expect(JSON.parse(last_response.body)).to eq 'No pokemon found'
       end
     end
   end
