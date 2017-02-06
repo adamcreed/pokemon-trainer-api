@@ -142,7 +142,7 @@ describe 'app' do
     end
 
     context 'when an invalid ID is entered' do
-      it 'returns a 404' do
+      it 'returns a 400' do
         params = {
                    id: 99999, name: 'Vulpix', nickname: 'Pikachu', gender: 'F',
                    level: 28, hp: 62, atk: 24, def: 23, sp_atk: 32, sp_def: 37,
@@ -154,8 +154,32 @@ describe 'app' do
 
         patch '/api/pokemon/99999', params
 
-        expect(last_response.status).to eq 404
+        expect(last_response.status).to eq 400
         expect(JSON.parse(last_response.body)).to eq 'No pokemon found'
+      end
+    end
+  end
+
+  describe '#patch /api/trainers/:id' do
+    context 'when a valid ID is entered' do
+      it 'updates the trainer' do
+        params = { id: 3, name: 'Tony Hawk', age: 48, gender: 'M' }
+
+        patch '/api/trainers/7', params
+
+        expect(JSON.parse(last_response.body)['id']).to eq 7
+        expect(JSON.parse(last_response.body)['name']).to eq 'Tony Hawk'
+      end
+    end
+
+    context 'when an invalid ID is entered' do
+      it 'returns a 400' do
+        params = { id: 3, name: 'Tony Hawk', age: 48, gender: 'M' }
+
+        patch '/api/trainers/99999', params
+
+        expect(last_response.status).to eq 400
+        expect(JSON.parse(last_response.body)).to eq 'No trainer found'
       end
     end
   end

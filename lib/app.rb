@@ -51,13 +51,24 @@ end
 
 patch '/api/pokemon/:id' do |id|
   pokemon = Pokemon.find_by(id: id)
-  halt [404, 'No pokemon found'.to_json] if pokemon.nil?
+  halt [400, 'No pokemon found'.to_json] if pokemon.nil?
 
   params.delete('splat')
   params.delete('captures')
 
   pokemon.update(params)
   pokemon.to_json
+end
+
+patch '/api/trainers/:id' do |id|
+  trainer = Trainer.find_by(id: id)
+  halt [400, 'No trainer found'.to_json] if trainer.nil?
+
+  params.delete('splat')
+  params.delete('captures')
+
+  trainer.update(params)
+  trainer.to_json
 end
 
 post '/api/trainers/:name' do |name|
